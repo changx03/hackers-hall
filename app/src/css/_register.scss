@@ -1,0 +1,39 @@
+.register {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.register-form {
+  margin: 0 auto;
+  width: 27%;
+  padding: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  @include background-opacity($color-light-grey--lighten-5, 0.65);
+}
+
+.register-heading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.register-heading h1 {
+  margin-left: 20px;
+}
+
+.register-form label {
+  display: none;
+}
+
+.register_sign-in {
+  margin-top: 10px;
+  text-align: center;
+}
+
+
+

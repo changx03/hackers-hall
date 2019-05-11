@@ -1,0 +1,13 @@
+.voting-result-chart {
+  @include background-opacity($color-light-grey--lighten-20, 0.85);
+  height: 95%;
+  width: 95%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.recharts-cartesian-axis-tick-value {
+  color: white;
+}
