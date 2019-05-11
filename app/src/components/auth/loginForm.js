@@ -32,6 +32,7 @@ function LoginFormContainer({ handleSubmit, error, submitting }) {
   const onSubmit = e => {
     console.log(e)
     e.preventDefault()
+    // TODO: Pass user and password?!
     handleSubmit()
   }
 

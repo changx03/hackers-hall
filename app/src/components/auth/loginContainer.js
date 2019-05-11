@@ -6,6 +6,7 @@ import LoginForm from './loginForm'
 class Login extends React.Component {
   _login = formData => {
     const { login } = this.props
+    console.log(formData)
     const params = new URLSearchParams(this.props.location.search)
     const returnUrl = params.get('returnUrl')
     login(formData, returnUrl)
