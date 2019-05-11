@@ -15,7 +15,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 // static folder
-app.use(express.static(path.resolve(__dirname, '../dist')))
+app.use(express.static(path.resolve(__dirname, '../../dist')))
 
 // session uses different client due to it requires db admin user role
 sessionConfig(app)

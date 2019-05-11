@@ -1,8 +1,8 @@
 import axios from 'axios'
-import appSettings from '../../appSettings'
+import { serverPath } from '../../appSettings'
 
 const instance = axios.create({
-  baseURL: appSettings.serverPath + '/api/event/vote'
+  baseURL: serverPath + '/api/event/vote'
 })
 
 export default class VotingApi {

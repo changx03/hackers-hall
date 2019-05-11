@@ -1,19 +1,7 @@
-import React from 'react'
-import { renderToString } from 'react-dom/server'
-import { Provider } from 'react-redux'
-import { applyMiddleware, createStore } from 'redux'
-import thunk from 'redux-thunk'
-import EventVotesDAO from '../db/EventVotesDAO'
+import configureStore from '../../../app/src/configureStore';
+import EventVotesDAO from '../db/EventVotesDAO';
 
-/******************************************************************************/
-// TODO: place holder for react app
-const reducer = function(state) {
-  return state
-}
-const App = () => <div>Hello world!</div>
-/******************************************************************************/
-
-function renderFullPage(html, preloadedState) {
+function renderFullPage(preloadedState) {
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -23,18 +11,25 @@ function renderFullPage(html, preloadedState) {
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Hacker's Hall</title>
   <link rel="shortcut icon" href="favicon.ico?ver=1" />
-        <link rel="stylesheet" href="styles.css" type="text/css">
-</head>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="./shared/toastr.min.css">
+  <link rel="stylesheet" type="text/css" href="./shared/vis.min.css">
+  <link rel="stylesheet" type="text/css" href="./shared/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="./shared/react-datepicker.min.css">
+  <link href="main.css" rel="stylesheet"></head>
 <body>
-  <div id="app">${html}</div>
+  <div id="app"></div>
   <script>
     // WARNING: See the following for security issues around embedding JSON in HTML:
     // http://redux.js.org/recipes/ServerRendering.html#security-considerations
     window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\u003c')}
   </script>
-  <script src="/static/bundle.js"></script>
-  <script src="https://code.jquery.com/jquery-2.2.3.min.js" crossorigin="anonymous"></script>
-</body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="./shared/jquery.min.js"></script>
+  <script type="text/javascript" src="./shared/toastr.min.js"></script>
+  <script type="text/javascript" src="./shared/bootstrap.min.js"></script>
+  <script type="text/javascript" src="./shared/vis.min.js" ></script>
+<script type="text/javascript" src="bundle.js"></script></body>
 </html>
 `
 }
@@ -51,13 +46,8 @@ export async function reactRender(req, res) {
       console.error(e.message)
     }
   }
-  const store = createStore(reducer, { userDataState: { user, votes } }, applyMiddleware(thunk))
-  const html = renderToString(
-    <Provider store={store}>
-      <App />
-    </Provider>
-  )
+
+  const store = configureStore({ userDataState: { user, votes } })
   const finalState = store.getState()
-  console.log(finalState)
-  res.send(renderFullPage(html, finalState))
+  res.send(renderFullPage(finalState))
 }

@@ -1,8 +1,8 @@
 import axios from 'axios'
-import appSettings from '../../appSettings'
+import { serverPath } from '../../appSettings'
 
 const instance = axios.create({
-  baseURL: appSettings.serverPath + '/api/timeline'
+  baseURL: serverPath + '/api/timeline'
 })
 
 export default class TimelineApi {

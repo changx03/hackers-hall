@@ -82,10 +82,10 @@ const config = {
     vis: 'vis'
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new MomentLocalesPlugin({
       localesToKeep: ['es-us']
     }),
-    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, './app/index.html')
     }),

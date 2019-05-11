@@ -8,13 +8,14 @@ import NotFoundPage from './components/common/notFoundPage'
 import MainContainer from './components/main'
 import TimelineContainer from './components/timeline/timelineContainer'
 import VotingResultsContainer from './components/votingResults/votingResultContainer'
-import { history } from './configureStore'
-import './css/index.scss'
+import { getHistory } from './configureStore'
+import { isServer } from '../appSettings';
 
 console.log(`NODE_ENV=${process.env.NODE_ENV}`)
+console.log(`App is running from ${isServer ? 'server' : 'client'}`)
 
 const App = () => (
-  <ConnectedRouter history={history}>
+  <ConnectedRouter history={getHistory()}>
     <MainContainer>
       <Switch>
         <Route path="/" exact component={TimelineContainer} />
