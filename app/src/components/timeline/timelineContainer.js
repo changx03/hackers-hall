@@ -48,7 +48,7 @@ class TimelineContainer extends React.Component {
     const { filterCriteria, timelineActions } = this.props
     timelineActions.updateFilterCriteria({
       ...filterCriteria,
-      startDate: moment(date).format('MM-DD-YYYY')
+      startDate: moment(date).toDate()
     })
     timelineActions.filterTimelineItemsByDates(filterCriteria.startDate, filterCriteria.endDate)
   }
@@ -57,7 +57,7 @@ class TimelineContainer extends React.Component {
     const { filterCriteria, timelineActions } = this.props
     timelineActions.updateFilterCriteria({
       ...filterCriteria,
-      endDate: moment(date).format('MM-DD-YYYY')
+      endDate: moment(date).toDate()
     })
     timelineActions.filterTimelineItemsByDates(filterCriteria.startDate, filterCriteria.endDate)
   }
