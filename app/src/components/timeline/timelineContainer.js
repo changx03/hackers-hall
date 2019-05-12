@@ -4,7 +4,6 @@ import { isEmpty } from 'lodash/lang'
 import moment from 'moment'
 import React from 'react'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import * as timelineActions from '../../actions/timelineActions'
 import * as voteActions from '../../actions/voteActions'
@@ -30,7 +29,7 @@ class TimelineContainer extends React.Component {
   routeClickHandler = () => {
     $('#timeline').on('click', 'a', event => {
       event.preventDefault()
-      this.props.router.push(this.pathname)
+      routerActions.push(this.pathname)
     })
   }
 
@@ -207,4 +206,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withRouter(TimelineContainer))
+)(TimelineContainer)

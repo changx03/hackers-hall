@@ -1,5 +1,5 @@
 import config from '../../config/config';
-import { collections, errors, InternalServerError } from '../../config/constant';
+import { collections, InternalServerError } from '../../config/constant';
 
 /**
  * TimelineItemSchema

@@ -5,10 +5,11 @@ const timelineRouter = Router()
 
 timelineRouter.route('*').get(async (req, res, next) => {
   try {
-    const { startDate, endDate } = req.query
+    let { startDate, endDate } = req.query
     console.log(`from ${startDate} to ${endDate}`)
-    let results
-    results = await TimelineItemsDAO.getTimelineItemsByRange(startDate, endDate)
+    startDate = startDate ? new Date(startDate) : null
+    endDate = endDate ? new Date(endDate) : null
+    const results = await TimelineItemsDAO.getTimelineItemsByRange(startDate, endDate)
     res.json({ timelineItems: results.timelineItems })
   } catch (err) {
     next(err)

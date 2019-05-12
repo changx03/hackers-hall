@@ -1,11 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { getVotingResult, voteForEvent } from '../../actions/voteActions'
+import { getVotingResult } from '../../actions/voteActions'
 import VotingResults from './votingResults'
 
 class VotingResultsContainer extends React.Component {
-  // TODO: How does this work?
-  static fetchDate = [getVotingResult]
+  static fetchData = [getVotingResult]
 
   componentDidMount() {
     const { votingResults, getVotingResult } = this.props
@@ -30,8 +29,6 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  voteForEvent: (timelineItem, user) =>
-    dispatch(voteForEvent(timelineItem, user)),
   getVotingResult: () => dispatch(getVotingResult())
 })
 

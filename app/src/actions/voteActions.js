@@ -28,7 +28,7 @@ class EventVote {
 }
 
 class EventResults {
-  static requrested() {
+  static requested() {
     return {
       type: actionTypes.vote.RESULTS_REQUEST,
       isRequested: true
@@ -73,7 +73,7 @@ export function voteForEvent(timelineItem, user) {
 
 export function getVotingResult() {
   return async dispatch => {
-    dispatch(EventResults.requrested())
+    dispatch(EventResults.requested())
     try {
       const votingResults = await VotingApi.getVotingResults()
       dispatch(EventResults.received(votingResults))

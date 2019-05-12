@@ -42,3 +42,8 @@ To run the files
 ```bash
 node ./migration/<filename>
 ```
+
+## TODO list
+
+- Fix route
+- Test voting

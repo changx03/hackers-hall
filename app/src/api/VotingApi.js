@@ -21,7 +21,8 @@ export default class VotingApi {
   static async getVotingResults() {
     try {
       const res = await instance.get()
-      return res.data
+      console.log('[getVotingResults]', res)
+      return res.data.popularVotes
     } catch (e) {
       throw e
     }
