@@ -1,8 +1,10 @@
 import { routerActions } from 'connected-react-router'
 import $ from 'jquery'
 import { isEmpty } from 'lodash/lang'
+import moment from 'moment'
 import React from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import * as timelineActions from '../../actions/timelineActions'
 import * as voteActions from '../../actions/voteActions'
@@ -11,14 +13,9 @@ import TimelineEventDetails from './eventDetails'
 import TimelineEventWelcome from './eventWelcome'
 import TimelineInteractions from './interactions'
 import Timeline from './timeline'
-import { withRouter } from 'react-router-dom'
 
 class TimelineContainer extends React.Component {
   pathname = null
-
-  state = {
-    filterCriteria: {}
-  }
 
   static fetchData = [timelineActions.getTimelineItems]
 
@@ -47,46 +44,42 @@ class TimelineContainer extends React.Component {
     }
   }
 
-  setStartDateState = date => {
+  onStartDateChange = date => {
     const { filterCriteria, timelineActions } = this.props
-    filterCriteria.startDate = date.toString()
-    timelineActions.filterTimelineItemsByDates(
-      filterCriteria.startDate,
-      filterCriteria.endDate
-    )
-    return this.setState({ filterCriteria })
+    timelineActions.updateFilterCriteria({
+      ...filterCriteria,
+      startDate: moment(date).format('MM-DD-YYYY')
+    })
+    timelineActions.filterTimelineItemsByDates(filterCriteria.startDate, filterCriteria.endDate)
   }
 
-  setEndDateState = date => {
+  onEndDateChange = date => {
     const { filterCriteria, timelineActions } = this.props
-    filterCriteria.endDate = date.toString()
-    timelineActions.filterTimelineItemsByDates(
-      filterCriteria.startDate,
-      filterCriteria.endDate
-    )
-    return this.setState({ filterCriteria })
+    timelineActions.updateFilterCriteria({
+      ...filterCriteria,
+      endDate: moment(date).format('MM-DD-YYYY')
+    })
+    timelineActions.filterTimelineItemsByDates(filterCriteria.startDate, filterCriteria.endDate)
   }
 
   onStackOrientationChange = () => {
     const { filterCriteria, timelineActions } = this.props
-    filterCriteria.stackOrientation = !filterCriteria.stackOrientation
-    timelineActions.updateFilterCriteria(filterCriteria)
-    return this.setState({ filterCriteria })
+    const nextStackOrientation = !filterCriteria.stackOrientation
+    timelineActions.updateFilterCriteria({
+      ...filterCriteria,
+      stackOrientation: nextStackOrientation
+    })
   }
 
   transformTimelineEvents = items =>
     items.map(item => {
       const primaryDetails =
         item.group === 'breach'
-          ? `# Records: ${item.records
-              .toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+          ? `# Records: ${item.records.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
           : `AF: ${item.affiliations ? item.affiliations : 'unknown'}`
 
       const secondaryDetails =
-        item.group === 'breach'
-          ? `Type: ${item.breachType}`
-          : `Targets: ${item.targets}`
+        item.group === 'breach' ? `Type: ${item.breachType}` : `Targets: ${item.targets}`
 
       item.className = 'timeline-event'
       item.title = `${item.details[0].substring(0, 35)}...`
@@ -150,14 +143,9 @@ class TimelineContainer extends React.Component {
     const { user, votes, filterCriteria, timelineItems = [] } = this.props
     const { event } = this.props.match.params
     const historyPoint = this.getTimelineEvent(event, timelineItems)
-    const userEventVotes = votes.length
-      ? votes.filter(vote => vote.voter === user.username)
-      : []
+    const userEventVotes = votes.length ? votes.filter(vote => vote.voter === user.username) : []
     const augmentedTimelineItems = this.transformTimelineEvents(timelineItems)
-    const timelineDates = this.getTimelineDateRange(
-      historyPoint,
-      filterCriteria
-    )
+    const timelineDates = this.getTimelineDateRange(historyPoint, filterCriteria)
     const options = { ...timelineDates, stack: filterCriteria.stackOrientation }
 
     return (
@@ -176,8 +164,8 @@ class TimelineContainer extends React.Component {
           <div className="timeline-info-bar">
             <TimelineInteractions
               filterCriteria={filterCriteria}
-              onStartDateChange={this.setStartDateState}
-              onEndDateChange={this.setEndDateState}
+              onStartDateChange={this.onStartDateChange}
+              onEndDateChange={this.onEndDateChange}
               onStackOrientationChange={this.onStackOrientationChange}
             />
           </div>
@@ -196,11 +184,7 @@ class TimelineContainer extends React.Component {
 const mapStateToProps = state => {
   const { timelineItems, filterCriteria } = state.timelineState
   const { user, votes } = state.userDataState
-  if (
-    !filterCriteria.startDate &&
-    filterCriteria.endDate &&
-    timelineItems.length
-  ) {
+  if (!filterCriteria.startDate && filterCriteria.endDate && timelineItems.length) {
     const startDates = timelineItems.map(i => new Date(i.start))
     const endDates = timelineItems.map(i => new Date(i.end))
     filterCriteria.startDate = getMinDate(startDates)

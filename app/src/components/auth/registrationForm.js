@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Field, reduxForm } from 'redux-form'
+import { Field, Form, reduxForm } from 'redux-form'
 import InputField from './inputField'
 
 const validate = values => {
@@ -14,10 +14,7 @@ const validate = values => {
 
   if (!values.password) {
     errors.password = 'Required'
-  } else if (
-    values.confirmPassword &&
-    values.confirmPassword != values.password
-  ) {
+  } else if (values.confirmPassword && values.confirmPassword !== values.password) {
     errors.password = errors.confirmPassword = 'Password Mismatch'
   }
 
@@ -30,21 +27,7 @@ const validate = values => {
   return errors
 }
 
-const RegistrationForm = ({ handleSubmit, submitting, error }) => {
-  const renderError = () => {
-    return error ? (
-      <div className="error">
-        <span>{error}</span>
-      </div>
-    ) : null
-  }
-
-  const onSubmit = e => {
-    console.log(e)
-    e.preventDefault()
-    handleSubmit()
-  }
-
+const RegistrationForm = ({ handleSubmit, submitting }) => {
   return (
     <div className="register">
       <div className="register-form">
@@ -52,7 +35,7 @@ const RegistrationForm = ({ handleSubmit, submitting, error }) => {
           <i className="fa fa-user-plus fa-4x" aria-hidden="true" />
           <h1>Register</h1>
         </div>
-        <form onSubmit={onSubmit}>
+        <Form onSubmit={handleSubmit}>
           <Field
             name="firstName"
             component={InputField}
@@ -99,15 +82,10 @@ const RegistrationForm = ({ handleSubmit, submitting, error }) => {
             label="Confirm Password"
             tabIndex="5"
           />
-          {renderError()}
-          <button
-            className="btn btn-primary"
-            tabIndex="6"
-            disabled={submitting}
-          >
+          <button className="btn btn-primary" tabIndex="6" disabled={submitting} type="submit">
             Register
           </button>
-        </form>
+        </Form>
         <div className="register_sign-in">
           <Link to="/login">Need an Account?</Link>
         </div>

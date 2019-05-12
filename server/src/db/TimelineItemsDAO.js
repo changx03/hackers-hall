@@ -56,11 +56,11 @@ export default class TimelineItemsDAO {
     if (end) {
       query.end = { $lte: end }
     }
-    const sort = { start: 1 }
     let cursor
     try {
-      cursor = await timelineItems.find(query).sort(sort)
-
+      cursor = await timelineItems.find(query)
+      const count = await cursor.count()
+      console.log(`find ${count} timelineItems`)
       const timelineItemList = await cursor.toArray()
       return { timelineItems: timelineItemList }
     } catch (e) {

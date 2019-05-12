@@ -10,23 +10,7 @@ class Registration extends React.Component {
   }
 
   render() {
-    const { registration, error } = this.props
-    return (
-      <RegistrationForm
-        registration={registration}
-        error={error}
-        onSubmit={this._register}
-      />
-    )
-  }
-}
-
-const mapStateToProps = state => {
-  const { registration, error, isRequested } = state.registrationState
-  return {
-    registration,
-    error,
-    isRequested
+    return <RegistrationForm onSubmit={this._register} />
   }
 }
 
@@ -35,6 +19,6 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(Registration)

@@ -5,8 +5,8 @@ export const timelineState = {
   isRequested: false,
   error: null,
   filterCriteria: {
-    startDate: moment(new Date()).subtract(90, 'd').toDate(),
-    endDate: new Date(),
+    startDate: moment(new Date('2000-01-01')).format('MM-DD-YYYY'),
+    endDate: moment(new Date('2000-01-01')).add(10, 'y').format('MM-DD-YYYY'),
     stackOrientation: false
   }
 }

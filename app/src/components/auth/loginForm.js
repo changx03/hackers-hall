@@ -1,7 +1,6 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { Field, reduxForm } from 'redux-form'
 import { Link } from 'react-router-dom'
+import { Field, Form, reduxForm } from 'redux-form'
 import InputField from './inputField'
 
 function validate(values) {
@@ -20,22 +19,7 @@ function validate(values) {
   return errors
 }
 
-function LoginFormContainer({ handleSubmit, error, submitting }) {
-  const renderError = () => {
-    return error ? (
-      <div className="error">
-        <span>{error}</span>
-      </div>
-    ) : null
-  }
-
-  const onSubmit = e => {
-    console.log(e)
-    e.preventDefault()
-    // TODO: Pass user and password?!
-    handleSubmit()
-  }
-
+function LoginFormContainer({ handleSubmit, submitting }) {
   return (
     <div className="login">
       <div className="login-form">
@@ -43,7 +27,7 @@ function LoginFormContainer({ handleSubmit, error, submitting }) {
           <i className="fa fa-sign-in fa-4x" aria-hidden="true" />
           <h1>Login</h1>
         </div>
-        <form onSubmit={onSubmit}>
+        <Form onSubmit={handleSubmit}>
           <Field
             name="email"
             component={InputField}
@@ -63,23 +47,16 @@ function LoginFormContainer({ handleSubmit, error, submitting }) {
             label="Password"
             tabIndex="4"
           />
-          {renderError()}
-          <button className="btn btn-primary" disabled={submitting}>
+          <button type="submit" className="btn btn-primary" disabled={submitting}>
             Login
           </button>
-        </form>
+        </Form>
         <div className="login_register-link">
           <Link to="/register">Don't have any account? Sign up</Link>
         </div>
       </div>
     </div>
   )
-}
-
-LoginFormContainer.propTypes = {
-  handleSubmit: PropTypes.func.isRequired,
-  submitting: PropTypes.bool.isRequired,
-  errors: PropTypes.object
 }
 
 export default reduxForm({

@@ -1,4 +1,8 @@
-require('@babel/register')
+const path = require('path')
+// applying runtime babel transform
+require('@babel/register')({
+  configFile: path.resolve(__dirname, '../../babel.server.config.js')
+})
 require('dotenv').config()
 process.env.NODE_ENV = 'development'
 
@@ -6,7 +10,7 @@ const MongoClient = require('mongodb').MongoClient
 const chalk = require('chalk').default
 const config = require('../config/config').default
 const collections = require('../config/constant').collections
-const data = require('../data/timeline_items.json')
+const data = require('../../data/timeline_items.json')
 
 console.log(`Connecting to ${config.dbUriAdmin}`)
 

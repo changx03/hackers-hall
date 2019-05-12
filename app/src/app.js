@@ -9,7 +9,7 @@ import MainContainer from './components/main'
 import TimelineContainer from './components/timeline/timelineContainer'
 import VotingResultsContainer from './components/votingResults/votingResultContainer'
 import { getHistory } from './configureStore'
-import { isServer } from '../appSettings';
+import { isServer } from '../appSettings'
 
 console.log(`NODE_ENV=${process.env.NODE_ENV}`)
 console.log(`App is running from ${isServer ? 'server' : 'client'}`)
