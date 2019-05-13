@@ -20,7 +20,6 @@ function validate(values) {
 }
 
 function LoginFormContainer({ handleSubmit, submitting, errors }) {
-  console.log(errors)
   return (
     <div className="login">
       <div className="login-form">

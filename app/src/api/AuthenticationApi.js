@@ -11,7 +11,7 @@ export default class AuthenticationApi {
       const res = await instance.post('/register', user)
       return res.data
     } catch (e) {
-      throw e
+      throw e.response && e.response.data ? new Error(e.response.data) : e
     }
   }
 

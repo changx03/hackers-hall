@@ -46,4 +46,5 @@ node ./migration/<filename>
 ## TODO list
 
 - [x] Fix route
+- [x] Added `express-validator` to `user` route
 - [ ] Test voting

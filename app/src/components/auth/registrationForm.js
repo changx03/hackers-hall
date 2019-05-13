@@ -15,19 +15,19 @@ const validate = values => {
   if (!values.password) {
     errors.password = 'Required'
   } else if (values.confirmPassword && values.confirmPassword !== values.password) {
-    errors.password = errors.confirmPassword = 'Password Mismatch'
+    errors.password = errors.confirmPassword = 'Password mismatch'
   }
 
   if (!values.confirmPassword) {
     errors.confirmPassword = 'Required'
-  } else if (values.password && values.confirmPassword != values.password) {
-    errors.password = errors.confirmPassword = 'Password Mismatch'
+  } else if (values.password && values.confirmPassword !== values.password) {
+    errors.password = errors.confirmPassword = 'Password mismatch'
   }
 
   return errors
 }
 
-const RegistrationForm = ({ handleSubmit, submitting }) => {
+const RegistrationForm = ({ handleSubmit, submitting, errors}) => {
   return (
     <div className="register">
       <div className="register-form">
@@ -35,6 +35,7 @@ const RegistrationForm = ({ handleSubmit, submitting }) => {
           <i className="fa fa-user-plus fa-4x" aria-hidden="true" />
           <h1>Register</h1>
         </div>
+        {errors && <div className="error"><span>{errors.message}</span></div>}
         <Form onSubmit={handleSubmit}>
           <Field
             name="firstName"
