@@ -3,6 +3,8 @@ import { Router } from 'express'
 import { body, validationResult } from 'express-validator/check'
 import UsersDAO from '../../db/UsersDAO'
 import Auth from '../../middleware/auth'
+import delayResponse from '../../utils/delayResponse'
+import HttpError from '../../utils/HttpError'
 
 const userRouter = Router()
 
@@ -13,8 +15,8 @@ userRouter.route('/register').post(
       .isEmail()
       .normalizeEmail()
       .custom(async value => {
-        const canSignUp = await UsersDAO.canSignUp(value)
-        if (!canSignUp) {
+        const isUserExist = await UsersDAO.isUserExist(value)
+        if (isUserExist) {
           throw new Error('This email already exists.')
         }
       }),
@@ -25,7 +27,7 @@ userRouter.route('/register').post(
   async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      return res.status(422).send(errors.array()[0].msg)
+      return next(new HttpError(errors.array()[0].msg, 422))
     }
 
     const user = req.body
@@ -65,28 +67,28 @@ userRouter.route('/login').post(
   async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      console.log(errors.array())
-      return res.status(422).send(errors.array()[0].msg)
+      return delayResponse(() => next(new HttpError(errors.array()[0].msg, 422)))
     }
 
     if (req.user) {
-      return next(new Error(`Already logged in as ${req.user.username}.`))
+      return delayResponse(() =>
+        next(new HttpError(`Already logged in as ${req.user.username}.`, 403))
+      )
     }
 
-    const { email, password } = req.body
-
     try {
+      const { email, password } = req.body
       const user = await UsersDAO.checkUserAndPassword(email, password)
       if (user.authError) {
-        return res.status(401).send(user.authError.message)
+        return delayResponse(() => next(new HttpError(user.authError.message, 401)))
       }
 
       // write session
       req.session.login(user)
 
-      return res.json(user)
+      return delayResponse(() => res.json(user))
     } catch (e) {
-      next(e)
+      delayResponse(() => next(e))
     }
   }
 )

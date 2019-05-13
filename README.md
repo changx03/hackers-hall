@@ -47,4 +47,5 @@ node ./migration/<filename>
 
 - [x] Fix route
 - [x] Added `express-validator` to `user` route
+- [x] Added 1s delay to login response - preventing brute-force password attack
 - [ ] Test voting

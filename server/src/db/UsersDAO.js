@@ -47,13 +47,12 @@ export default class UsersDAO {
     }
   }
 
-  static async canSignUp(email) {
+  static async isUserExist(email) {
     try {
       const res = await users.findOne({ email }, { projection: { email: 1, _id: 0 } })
-      console.log(res)
-      return !res
+      return !!res
     } catch (e) {
-      console.error(`Unable to issue canSignUp, ${e.message}`)
+      console.error(`Unable to issue hasUser, ${e.message}`)
       throw new InternalServerError()
     }
   }
