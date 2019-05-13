@@ -48,4 +48,5 @@ node ./migration/<filename>
 - [x] Fix route
 - [x] Added `express-validator` to `user` route
 - [x] Added 1s delay to login response - preventing brute-force password attack
+- [x] Added `login_attempts` table. The client can try to login up to 5 times with same IP and email
 - [ ] Test voting

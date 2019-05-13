@@ -2,6 +2,7 @@ import chalk from 'chalk'
 import { MongoClient } from 'mongodb'
 import config from '../config/config'
 import EventVotesDAO from './db/EventVotesDAO'
+import LoginAttemptsDAO from './db/LoginAttemptsDAO'
 import TimelineItemsDAO from './db/TimelineItemsDAO'
 import UsersDAO from './db/UsersDAO'
 import app from './server'
@@ -19,6 +20,7 @@ MongoClient.connect(config.dbUri, {
     await TimelineItemsDAO.injectDB(client)
     await EventVotesDAO.injectDB(client)
     await UsersDAO.injectDB(client)
+    await LoginAttemptsDAO.injectDB(client)
 
     app.listen(config.port, () => {
       console.log('listening on ' + chalk.green(`http://localhost:${config.port}`))

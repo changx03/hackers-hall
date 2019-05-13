@@ -18,8 +18,14 @@ MongoClient.connect(config.dbUriAdmin, {
 })
   .then(async client => {
     const db = client.db(config.database)
-    const timelineItems = await db.collection(collections.TimelineItems)
-    const res = await timelineItems.createIndex({ start: 1, end: 1 })
+    const loginAttempts = await db.collection(collections.LoginAttempt)
+    // if an email is logging in from multiple IP, it's very likely the account is compromised
+    let res = await loginAttempts.createIndex({ email: 1, ip: 1 })
+    console.log(chalk.green(res))
+    res = await loginAttempts.createIndex(
+      { timeout: 1 },
+      { expireAfterSeconds: 30 * 60 /** 30 minus */ }
+    )
     console.log(chalk.green(res))
 
     client.close()

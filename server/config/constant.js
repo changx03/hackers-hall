@@ -1,7 +1,8 @@
 export const collections = {
   TimelineItems: 'timeline_items',
   Users: 'users',
-  EventVotes: 'event_votes'
+  EventVotes: 'event_votes',
+  LoginAttempt: 'login_attempts'
 }
 
 /**

@@ -1,8 +1,8 @@
+import bcrypt from 'bcrypt'
 import chalk from 'chalk'
 import { ObjectId } from 'mongodb'
 import config from '../../config/config'
 import { collections, InternalServerError } from '../../config/constant'
-import bcrypt from 'bcrypt'
 
 const saltRounds = 10
 
