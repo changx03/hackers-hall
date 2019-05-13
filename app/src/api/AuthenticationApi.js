@@ -16,11 +16,12 @@ export default class AuthenticationApi {
   }
 
   static async login(credentials) {
+    let res
     try {
-      const res = await instance.post('/login', credentials)
+      res = await instance.post('/login', credentials)
       return res.data
     } catch (e) {
-      throw e
+      throw e.response && e.response.data ? new Error(e.response.data) : e
     }
   }
 

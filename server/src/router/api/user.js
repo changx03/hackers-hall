@@ -59,9 +59,9 @@ userRouter
     const { email, password } = req.body
 
     try {
-      const user = await UsersDAO.getUser(email, password)
+      const user = await UsersDAO.checkUserAndPassword(email, password)
       if (user.authError) {
-        return res.status(401).send('Invalid username or password.')
+        return res.status(401).send(user.authError.message)
       }
 
       // write session

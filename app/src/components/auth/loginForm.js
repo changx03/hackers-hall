@@ -19,7 +19,8 @@ function validate(values) {
   return errors
 }
 
-function LoginFormContainer({ handleSubmit, submitting }) {
+function LoginFormContainer({ handleSubmit, submitting, errors }) {
+  console.log(errors)
   return (
     <div className="login">
       <div className="login-form">
@@ -27,6 +28,7 @@ function LoginFormContainer({ handleSubmit, submitting }) {
           <i className="fa fa-sign-in fa-4x" aria-hidden="true" />
           <h1>Login</h1>
         </div>
+        {errors && <div className="error"><span>{errors.message}</span></div>}
         <Form onSubmit={handleSubmit}>
           <Field
             name="email"

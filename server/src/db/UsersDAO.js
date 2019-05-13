@@ -2,6 +2,9 @@ import chalk from 'chalk'
 import { ObjectId } from 'mongodb'
 import config from '../../config/config'
 import { collections, InternalServerError } from '../../config/constant'
+import bcrypt from 'bcrypt'
+
+const saltRounds = 10
 
 /**
  * UserSchema
@@ -60,8 +63,9 @@ export default class UsersDAO {
     const username = userInfo.username || email
     const created = userInfo.created || new Date()
     try {
+      const hash = bcrypt.hashSync(password, saltRounds)
       const insertCommandResult = await users.insertOne(
-        { username, firstName, lastName, email, password, created },
+        { username, firstName, lastName, email, password: hash, created },
         { projection: { password: 0 } }
       )
       const res = {
@@ -75,15 +79,20 @@ export default class UsersDAO {
     }
   }
 
-  static async getUser(email, password) {
+  static async checkUserAndPassword(email, password) {
     try {
-      const user = await users.findOne({ email, password }, { projection: { password: 0 } })
+      const user = await users.findOne({ email })
+      const authError = new Error('Invalid username or password')
       if (!user) {
-        return {
-          authError: new Error('Invalid username or password')
-        }
+        return { authError }
       } else {
-        return user
+        // compare hashed password
+        const result = bcrypt.compareSync(password, user.password /** hash */)
+        if (result) {
+          return user
+        } else {
+          return { authError }
+        }
       }
     } catch (e) {
       console.error(`Unable to issue getUser, ${e.message}`)

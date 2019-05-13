@@ -12,15 +12,19 @@ class Login extends React.Component {
   }
 
   render() {
-    return <LoginForm onSubmit={this._login} />
+    return <LoginForm onSubmit={this._login} errors={this.props.error} />
   }
 }
+
+const mapStateToProps = state => ({
+  error: state.loginState.error
+})
 
 const mapDispatchToProps = dispatch => ({
   login: (formData, returnUrl) => dispatch(login(formData, returnUrl))
 })
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Login)
