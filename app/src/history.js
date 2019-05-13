@@ -1,5 +1,5 @@
-import { createBrowserHistory } from 'history'
+import { createBrowserHistory, createMemoryHistory } from 'history'
 
-const history = createBrowserHistory()
+const history = typeof window !== 'undefined' && window.document ? createBrowserHistory() : createMemoryHistory()
 
 export default history

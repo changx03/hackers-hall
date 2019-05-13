@@ -4,7 +4,7 @@ import thunk from 'redux-thunk'
 import history from './history'
 import createRootReducer from './reducers/reducers'
 
-const composeEnhancers = window ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose : compose
+const composeEnhancers = typeof window !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose : compose
 
 function configureStore(preloadedState) {
   const store = createStore(
