@@ -1,4 +1,4 @@
-import { routerActions } from 'connected-react-router'
+import { push } from 'connected-react-router'
 import $ from 'jquery'
 import { isEmpty } from 'lodash/lang'
 import moment from 'moment'
@@ -29,15 +29,15 @@ class TimelineContainer extends React.Component {
   routeClickHandler = () => {
     $('#timeline').on('click', 'a', event => {
       event.preventDefault()
-      routerActions.push(this.pathname)
+      this.props.push(this.pathname)
     })
   }
 
   voteForEvent = event => {
-    const { user, votingActions } = this.props
+    const { user, votingActions, push } = this.props
     const { pathname } = this.props.location
     if (isEmpty(user)) {
-      routerActions.push(`login?returnUrl=${pathname}`)
+      push(`login?returnUrl=${pathname}`)
     } else {
       votingActions.voteForEvent(event, user)
     }
@@ -200,7 +200,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   votingActions: bindActionCreators(voteActions, dispatch),
-  timelineActions: bindActionCreators(timelineActions, dispatch)
+  timelineActions: bindActionCreators(timelineActions, dispatch),
+  push: url => dispatch(push(url))
 })
 
 export default connect(

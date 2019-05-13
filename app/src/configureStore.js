@@ -1,26 +1,14 @@
 import { routerMiddleware } from 'connected-react-router'
-import { createBrowserHistory, createMemoryHistory } from 'history'
 import { applyMiddleware, compose, createStore } from 'redux'
 import thunk from 'redux-thunk'
-import { isServer } from '../appSettings'
+import history from './history'
 import createRootReducer from './reducers/reducers'
 
-let history
-
-console.log(`Is server? ${isServer}`)
-
-export function getHistory(url = '/') {
-  if (!history) {
-    history = isServer ? createMemoryHistory({ initialEntries: [url] }) : createBrowserHistory()
-  }
-  return history
-}
-
-const composeEnhancers = isServer ? compose : window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+const composeEnhancers = window ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose : compose
 
 function configureStore(preloadedState) {
   const store = createStore(
-    createRootReducer(getHistory()),
+    createRootReducer(history),
     preloadedState,
     composeEnhancers(applyMiddleware(routerMiddleware(history), thunk))
   )

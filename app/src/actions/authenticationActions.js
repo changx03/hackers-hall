@@ -1,4 +1,4 @@
-import { routerActions } from 'connected-react-router'
+import { push } from 'connected-react-router'
 import AuthenticationApi from '../api/AuthenticationApi'
 import actionTypes from './actionTypes'
 
@@ -96,7 +96,7 @@ export function login(credentials, returnUrl) {
       const user = await AuthenticationApi.login(credentials)
       dispatch(UserAuthentication.success(user))
       dispatch(userDataUpdate(user))
-      dispatch(routerActions.push(returnUrl || '/'))
+      dispatch(push(returnUrl || '/'))
     } catch (e) {
       dispatch(UserAuthentication.failure(e))
     }
@@ -110,7 +110,7 @@ export function logout() {
       await AuthenticationApi.logout()
       dispatch(UserLogout.successful())
       dispatch(userDataUpdate({}))
-      dispatch(routerActions.push('/'))
+      dispatch(push('/'))
     } catch (e) {
       dispatch(UserLogout.failure(e))
     }
@@ -123,7 +123,7 @@ export function register(user) {
     try {
       const message = await AuthenticationApi.register(user)
       dispatch(UserRegistration.success(message))
-      dispatch(routerActions.push('/login'))
+      dispatch(push('/login'))
     } catch (e) {
       dispatch(UserRegistration.failure(e))
     }

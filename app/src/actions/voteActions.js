@@ -1,7 +1,7 @@
-import { routerActions } from 'connected-react-router'
+import { push } from 'connected-react-router'
 import VotingApi from '../api/VotingApi'
-import actionTypes from './actionTypes'
 import displayNotification from '../utils/displayNotification'
+import actionTypes from './actionTypes'
 
 class EventVote {
   static sent() {
@@ -65,7 +65,7 @@ export function voteForEvent(timelineItem, user) {
       dispatch(EventVote.failure(e))
 
       if (e.status === 409) {
-        dispatch(routerActions.push(`/login?returnUrl=timeline/${timelineItem._id}`))
+        dispatch(push(`/login?returnUrl=timeline/${timelineItem._id}`))
       }
     }
   }

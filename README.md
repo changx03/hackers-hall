@@ -45,5 +45,5 @@ node ./migration/<filename>
 
 ## TODO list
 
-- Fix route
-- Test voting
+- [x] Fix route
+- [ ] Test voting
