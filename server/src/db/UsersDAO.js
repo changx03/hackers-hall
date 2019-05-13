@@ -88,6 +88,7 @@ export default class UsersDAO {
       } else {
         // compare hashed password
         const result = bcrypt.compareSync(password, user.password /** hash */)
+        delete user.password
         if (result) {
           return user
         } else {
