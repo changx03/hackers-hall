@@ -1,5 +1,5 @@
-import configureStore from '../../../app/src/configureStore';
-import EventVotesDAO from '../db/EventVotesDAO';
+import configureStore from '../../../app/src/configureStore'
+import EventVotesDAO from '../db/EventVotesDAO'
 
 function renderFullPage(preloadedState) {
   return `

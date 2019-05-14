@@ -86,9 +86,9 @@ const config = {
     new MomentLocalesPlugin({
       localesToKeep: ['es-us']
     }),
-    new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, './app/index.html')
-    }),
+    // new HtmlWebpackPlugin({
+    //   template: path.resolve(__dirname, './app/index.html')
+    // }),
     new MiniCssExtractPlugin({
       filename: '[name].css',
       chunkFilename: '[id].css'

@@ -52,16 +52,21 @@ node ./migration/<filename>
 ## TODO list
 
 - [x] Fix route
-- [x] Added `express-validator` to `user` route
-- [x] Added 1s delay to login response - preventing brute-force password attack
-- [x] Added `login_attempts` table. The client can try to login up to 5 times with same IP and email
-- [x] By default `express-session` uses name 'connect.sid'. We can make it less obvious what package we are using by providing a new `name`.
-- [x] Added session-cookie generation demo
+- [x] In vote DAO, replaced `find()` to `findMany()`. `find()` returns a cursor instead of array!
+- [x] Disable `HtmlWebpackPlugin`, so server send server rendered page to client
 - [ ] Test voting
 
 ## Topics
 
+- [x] Added `express-validator` to `user` route
+- [x] Added 1s delay to login response - preventing brute-force password attack
+- [x] Added `login_attempts` table. The client can try to login up to 5 times with same IP and email
+- [x] By default `express-session` uses name 'connect.sid'. We can make it less obvious what package we are using by providing a new `name`.
+
 ### Session
+
+- [x] Added session-cookie generation demo
+- [x] set `httpOnly` to `true` <- prevent cookie leak
 
 - session data is **NOT** saved in the cookie itself, just the session ID. Session data is stored server-side
 - `secure: true` - client will not send session back via **HTTP**, but only via **HTTPS**. <- Recommended, but `disable` during _development_

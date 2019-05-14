@@ -29,7 +29,7 @@ export default function sessionConfig(app) {
     saveUninitialized: false,
     cookie: {
       path: '/',
-      httpOnly: false,
+      httpOnly: true,
       secure: false,
       maxAge: 3600 * 1000 /** 1 hour in millisecond */
     },
