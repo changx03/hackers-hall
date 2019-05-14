@@ -29,8 +29,8 @@ export default function sessionConfig(app) {
     saveUninitialized: false,
     cookie: {
       path: '/',
-      httpOnly: true,
-      secure: false,
+      httpOnly: true, // only send during http requests
+      secure: false,  // only send via https
       maxAge: 3600 * 1000 /** 1 hour in millisecond */
     },
     // Creating TTL (time-to-live) index requires admin right. This helps

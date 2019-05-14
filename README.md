@@ -105,3 +105,16 @@ TTL (time-to-live) index expires after specific clock time
 - Reusing session for the same authentication will open a session fixation attack.
 - New session should generate every time the user login
 - Use `req.session.regenerate(err => {})` to generate new session
+
+#### Re-authorization
+
+e.g. asking client to login when placing orders
+
+#### Session security summary
+
+- Protecting the session ID
+- Time-limited sessions
+- New session on authentication
+- HTTPOnly flagged cookies
+- Transport layer security
+- Secure flagged cookies
