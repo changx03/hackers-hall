@@ -35,6 +35,7 @@
 - Run `node ./server/migration/createIndexUsers.js` to create indexes in `users` collection
 - Run `node ./server/migration/createIndexTimelineItems.js` to create indexes in `timeline_items` collection
 - Run `node ./server/migration/createIndexLoginAttempt.js` to create indexes in `login_attempts` collection
+- Run `node ./server/migration/timelineItemsDateUpdate.js` to convert date string to Date
 - Run `yarn start` to start the server
 
 ## Migration
@@ -118,3 +119,62 @@ e.g. asking client to login when placing orders
 - HTTPOnly flagged cookies
 - Transport layer security
 - Secure flagged cookies
+
+### Testing tools
+
+- Fiddler
+- Burp Suite
+
+### Database security - securing MongoDB from injection attacks
+
+#### Testing query string
+
+http://localhost:8080/api/timeline?startDate="');return true;}+//2000-01-03T00:00:00.000Z&endDate=2010-01-01T00:00:00.000Z
+
+http://localhost:8080/api/timeline?startDate="')2000-01-03T00:00:00.000Z&endDate=2010-01-01T00:00:00.000Z
+
+#### MongoDB query example
+
+```javascript
+db.products.find({ $where: `this.name==${user - input}` })
+```
+
+- \$where
+- map-reduce
+- group command
+
+Code vulnerable to injection attack
+
+```javascript
+const query = {$where: "this.hidden == false"};
+if (startDate && endDate) {
+  query['$where'] =
+    "this.start >= new Date('" + startDate + "') && " +
+    "this.end <= new Date('" + endDate + "') &&" + 'this.hidden == false;'
+}
+const TimelineItem = await getTimelineItemModel();
+const timelineItems = await TimelineItem.find(query);
+
+// when startDate="');return true;}+//...
+query = {$where: "this.start >= new Date('" + "'); return true; } // comments..."}
+```
+
+#### MongoDB config file
+
+disable query execute javascript
+
+```markdown
+security:
+  javascriptEnabled: false
+```
+
+#### Adding query checking in application level
+
+Checking query parameter with `express-validator` before it passes into MongoDB
+
+#### Summary
+
+- NoSql may still venerable to SQL injection attach
+- Injection demonstration with Burp Suite
+- MongoDB javascript injection attacks
+- Handling untrusted data
