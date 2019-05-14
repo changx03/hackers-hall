@@ -29,7 +29,13 @@
 ## Setup database user
 
 - Rename `.env.rename` file to `.env`
+- Use `node ./server/migration/genRandStr.js 16` to generate 16 characters password
 - Run the script from `./server/migration/dbscript.js` file in Mongo shell to create user
+- Run `node ./server/migration/insertTimelineItems.js` to insert `timeline_items` collection
+- Run `node ./server/migration/createIndexUsers.js` to create indexes in `users` collection
+- Run `node ./server/migration/createIndexTimelineItems.js` to create indexes in `timeline_items` collection
+- Run `node ./server/migration/createIndexLoginAttempt.js` to create indexes in `login_attempts` collection
+- Run `yarn start` to start the server
 
 ## Migration
 
