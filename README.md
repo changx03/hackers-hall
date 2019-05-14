@@ -49,4 +49,48 @@ node ./migration/<filename>
 - [x] Added `express-validator` to `user` route
 - [x] Added 1s delay to login response - preventing brute-force password attack
 - [x] Added `login_attempts` table. The client can try to login up to 5 times with same IP and email
+- [x] By default `express-session` uses name 'connect.sid'. We can make it less obvious what package we are using by providing a new `name`.
+- [x] Added session-cookie generation demo
 - [ ] Test voting
+
+## Topics
+
+### Session
+
+- session data is **NOT** saved in the cookie itself, just the session ID. Session data is stored server-side
+- `secure: true` - client will not send session back via **HTTP**, but only via **HTTPS**. <- Recommended, but `disable` during _development_
+- session format: "s:" + sid + "." + "hash(secret)(sid)"
+
+```javascript
+const hash = crypto
+  .createHmac('sha256', secret)
+  .update(sid)
+  .digest('base64')
+  .replace(/=+$/, '')
+const buildSession = encodeURIComponent('s:' + sid + '.' + hash)
+```
+
+- HTTPOnly - Cross-site Scripting (XSS)
+
+#### Session TTL
+
+`db.sessions.getIndexes()`
+
+```json
+{
+  "key": {
+    "expires": 1
+  },
+  "name": "expires_1",
+  "ns": "hackers_hall.sessions",
+  "expireAfterSeconds": 0
+}
+```
+
+TTL (time-to-live) index expires after specific clock time
+
+#### Recycled Sessions
+
+- Reusing session for the same authentication will open a session fixation attack.
+- New session should generate every time the user login
+- Use `req.session.regenerate(err => {})` to generate new session

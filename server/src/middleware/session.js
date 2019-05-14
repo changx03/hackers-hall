@@ -4,8 +4,20 @@ import config from '../../config/config'
 
 export default function sessionConfig(app) {
   // extending session prototype
-  session.Session.prototype.login = function(user) {
-    this.userInfo = user
+  // Returns the same session - this will open a Session Fixation Attack
+  // session.Session.prototype.login = function(user) {
+  //   this.userInfo = user
+  // }
+
+  session.Session.prototype.login = function(user, callback) {
+    const req = this.req
+    req.session.regenerate(err => {
+      if (err) {
+        callback(err)
+      }
+      req.session.userInfo = user
+      callback()
+    })
   }
 
   // session
@@ -19,7 +31,7 @@ export default function sessionConfig(app) {
       path: '/',
       httpOnly: false,
       secure: false,
-      maxAge: 7 * 24 * 3600 * 1000 /** 7days in millisecond */
+      maxAge: 3600 * 1000 /** 1 hour in millisecond */
     },
     // Creating TTL (time-to-live) index requires admin right. This helps
     // remove expired sessions
@@ -27,8 +39,9 @@ export default function sessionConfig(app) {
       url: config.dbUriAdmin,
       // collection: 'sessions', /** default */
       // autoRemove: 'native', /** default */
-      ttl: 7 * 24 * 3600 /** 7 day in second */
-    })
+      ttl: 3600 /** 1 hour in second */
+    }),
+    name: 'sid' // By default `express-session` uses name 'connect.sid'. We can make it less obvious what package we are using.
   }
 
   if (config.mode === 'production') {

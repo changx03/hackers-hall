@@ -6,6 +6,7 @@ import Auth from '../../middleware/auth'
 import delayResponse from '../../utils/delayResponse'
 import HttpError from '../../utils/HttpError'
 import LoginAttemptsDAO from '../../db/LoginAttemptsDAO'
+import { InternalServerError } from '../../../config/constant';
 
 const userRouter = Router()
 
@@ -92,7 +93,11 @@ userRouter.route('/login').post(
         }
   
         // write session
-        req.session.login(user)
+        req.session.login(user, err => {
+          if (err) {
+            return next(new InternalServerError())
+          }
+        })
         await LoginAttemptsDAO.successfulLoginAttempt(clientIp, email)
         return delayResponse(() => res.json(user))
       } else {
