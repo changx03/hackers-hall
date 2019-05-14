@@ -1,13 +1,12 @@
 import { InternalServerError } from '../../config/constant'
 import UsersDAO from '../db/UsersDAO'
-import chalk from 'chalk';
+import chalk from 'chalk'
 
 export default class Auth {
   static checkUser() {
     return async function(req, res, next) {
       // TODO: Insecure implementation part 1 - get user info from session
       const { userInfo = {} } = req.session
-      console.log(chalk.green('[session]'), req.session)
       if (!userInfo._id) {
         next()
         return

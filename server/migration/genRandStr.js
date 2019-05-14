@@ -1,5 +1,5 @@
 const crypto = require('crypto')
-const charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+const charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
 
 /**
  * genRandStr Generates cryptographically string pseudo-random string
@@ -29,7 +29,7 @@ function genRandStr(len, charSet) {
 const argv = process.argv.slice(2)
 let length = 8
 if (argv.length === 1 && !isNaN(parseInt(argv[0]))) {
-  length = argv[0]
+  length = parseInt(argv[0])
 }
 
 console.log(genRandStr(length, charSet))
