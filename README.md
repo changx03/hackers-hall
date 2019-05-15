@@ -277,7 +277,15 @@ Issues with sanitizing
 
 Absolutely minimal: enable security.authorization in mongod
 
+#### Scenario: Creating custom MongoDB role
+
+The MongoDB client for accessing *timeline_items* should not able to delete or write on *users* collection
+
 Role based users should only able to access certain collection, not the entire database
+
+#### Problem for running aggregation function
+
+Providing **read-only** right to the *role*
 
 #### Server-side function level control failure
 
@@ -285,7 +293,7 @@ Role based users should only able to access certain collection, not the entire d
 
 #### Access Control Misconfiguration
 
-##### Scenario 1: Only checking using right in `get` request
+##### Scenario: Only checking using right in `get` request
 
 - User right is only check within `.get()`.
 - Using `.all((req, res, next) => { /* Check user right */ })` to cover all HTTP requests
