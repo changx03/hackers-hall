@@ -30,4 +30,18 @@ export default class TimelineApi {
       return []
     }
   }
+
+  static async filterTimelineItemsBySearchCriteria(searchTerms) {
+    try {
+      const res = await instance.get('', {
+        params: {
+          search: searchTerms
+        }
+      })
+      return res.data.timelineItems || []
+    } catch (e) {
+      console.error(e.message)
+      return []
+    }
+  }
 }

@@ -62,3 +62,16 @@ export function updateFilterCriteria(filterCriteria) {
     dispatch(TimelineItems.updateFilterCriteria(filterCriteria))
   }
 }
+
+export function filterTimelineItemsBySearchCriteria(searchTerms) {
+  return async function(dispatch) {
+    dispatch(TimelineItems.requested())
+
+    try {
+      const items = await TimelineApi.filterTimelineItemsBySearchCriteria(searchTerms)
+      dispatch(TimelineItems.received(items))
+    } catch (e) {
+      dispatch(TimelineItems.failure(e))
+    }
+  }
+}

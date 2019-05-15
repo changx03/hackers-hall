@@ -86,9 +86,10 @@ const config = {
     new MomentLocalesPlugin({
       localesToKeep: ['es-us']
     }),
-    // new HtmlWebpackPlugin({
-    //   template: path.resolve(__dirname, './app/index.html')
-    // }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, './app/index.html'),
+      filename: 'app.html'
+    }),
     new MiniCssExtractPlugin({
       filename: '[name].css',
       chunkFilename: '[id].css'
@@ -112,8 +113,11 @@ if (!isProduction) {
     contentBase: [path.join(__dirname, 'dist')],
     watchContentBase: false,
     hotOnly: true,
-    historyApiFallback: true, // stops route redirect 404
-    port: 3030
+    historyApiFallback: {
+      index: '/app.html'
+    }, // stops route redirect 404
+    port: 3030,
+    index: 'app.html'
   }
   config.plugins.push(new webpack.HotModuleReplacementPlugin())
 }

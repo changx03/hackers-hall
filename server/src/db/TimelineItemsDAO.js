@@ -66,4 +66,20 @@ export default class TimelineItemsDAO {
       throw new InternalServerError()
     }
   }
+
+  static async getTimelineItemsBySearch(search) {
+    const query = {}
+    if (typeof search === 'string') {
+      query.$text = { $search: search }
+    }
+    let cursor
+    try {
+      cursor = await timelineItems.find(query)
+      const timelineItemList = await cursor.toArray()
+      return { timelineItems: timelineItemList }
+    } catch (e) {
+      console.error(`Unable to issue getTimelineItemsBySearch, ${e.message}`)
+      throw new InternalServerError()
+    }
+  }
 }

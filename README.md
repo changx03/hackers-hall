@@ -146,17 +146,22 @@ db.products.find({ $where: `this.name==${user - input}` })
 Code vulnerable to injection attack
 
 ```javascript
-const query = {$where: "this.hidden == false"};
+const query = { $where: 'this.hidden == false' }
 if (startDate && endDate) {
   query['$where'] =
-    "this.start >= new Date('" + startDate + "') && " +
-    "this.end <= new Date('" + endDate + "') &&" + 'this.hidden == false;'
+    "this.start >= new Date('" +
+    startDate +
+    "') && " +
+    "this.end <= new Date('" +
+    endDate +
+    "') &&" +
+    'this.hidden == false;'
 }
-const TimelineItem = await getTimelineItemModel();
-const timelineItems = await TimelineItem.find(query);
+const TimelineItem = await getTimelineItemModel()
+const timelineItems = await TimelineItem.find(query)
 
 // when startDate="');return true;}+//...
-query = {$where: "this.start >= new Date('" + "'); return true; } // comments..."}
+query = { $where: "this.start >= new Date('" + "'); return true; } // comments..." }
 ```
 
 #### MongoDB config file
@@ -165,7 +170,7 @@ disable query execute javascript
 
 ```markdown
 security:
-  javascriptEnabled: false
+javascriptEnabled: false
 ```
 
 #### Adding query checking in application level
@@ -191,15 +196,15 @@ Setup ZAP to send exploit requests
 - Send an API request (register a new user)
 - Right click payload, choose **fuzz**
 - Highlight the content, click **Add**
-- *Add payload*, type: *File Fuzzers*, `jbrofuzz` -> Exploits, SQL Injection
-- *Start Fuzzer*
+- _Add payload_, type: _File Fuzzers_, `jbrofuzz` -> Exploits, SQL Injection
+- _Start Fuzzer_
 
 #### Identifying untrusted data
 
 Which one should we trust?
 
 - [ ] Form input values
-- [ ] *User-Agent* HTTP request header
+- [ ] _User-Agent_ HTTP request header
 - [ ] `<input type="hidden" value="X3gAAOZ...">` server-side injected hidden data <- Can't trusted!
 - [ ] Data from application database <- Can't fully trusted!
 
@@ -239,7 +244,7 @@ a-z
 
 #### Escaping Untrusted Data
 
-***Escaping** simply lets the interpreter know that the data is not intended to be executed, and therefore prevents attacks from working.
+**\*Escaping** simply lets the interpreter know that the data is not intended to be executed, and therefore prevents attacks from working.
 
 \<script\> -> interpreter -> Data "\&lt;script\&gt;"
 
@@ -279,13 +284,18 @@ Absolutely minimal: enable security.authorization in mongod
 
 #### Scenario: Creating custom MongoDB role
 
-The MongoDB client for accessing *timeline_items* should not able to delete or write on *users* collection
+The MongoDB client for accessing _timeline_items_ should not able to delete or write on _users_ collection
 
 Role based users should only able to access certain collection, not the entire database
 
+```javascript
+// read MongoDB users from a JSON file
+const accounts = JSON.parse(fs.readFileAsync('db.config.json', 'utf-8'))
+```
+
 #### Problem for running aggregation function
 
-Providing **read-only** right to the *role*
+Providing **read-only** right to the _role_
 
 #### Server-side function level control failure
 
@@ -297,3 +307,13 @@ Providing **read-only** right to the *role*
 
 - User right is only check within `.get()`.
 - Using `.all((req, res, next) => { /* Check user right */ })` to cover all HTTP requests
+
+### Defending Against Cross-site Scripting (XSS)
+
+#### Demo: a malicious link from email can send your session-cookie to 3rd party
+
+Scenario: the search result display on the page
+
+```
+.../timeline?search=<script>alert(document.cookie)</script>
+```

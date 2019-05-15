@@ -7,14 +7,19 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as timelineActions from '../../actions/timelineActions'
 import * as voteActions from '../../actions/voteActions'
+import history from '../../history'
 import { getMaxDate, getMinDate } from '../../utils/dateHelper'
 import TimelineEventDetails from './eventDetails'
 import TimelineEventWelcome from './eventWelcome'
 import TimelineInteractions from './interactions'
 import Timeline from './timeline'
+import TimelineSearchResult from './timelineSearchResult'
 
 class TimelineContainer extends React.Component {
   pathname = null
+  state = {
+    searchTerms: ''
+  }
 
   static fetchData = [timelineActions.getTimelineItems]
 
@@ -29,7 +34,7 @@ class TimelineContainer extends React.Component {
   routeClickHandler = () => {
     $('#timeline').on('click', 'a', event => {
       event.preventDefault()
-      this.props.push(this.pathname)
+      history.push(this.pathname)
     })
   }
 
@@ -138,8 +143,23 @@ class TimelineContainer extends React.Component {
     }
   }
 
+  onSearchCriteriaChange = event => {
+    const field = event.target.name
+    let state = this.state
+    state[field] = event.target.value
+    return this.setState({ state })
+  }
+  submitSearch = () => {
+    const { timelineActions } = this.props
+    const { searchTerms } = this.state
+    timelineActions.filterTimelineItemsBySearchCriteria(searchTerms)
+    history.push(`timeline?search=${searchTerms}`)
+  }
+
   render() {
-    const { user, votes, filterCriteria, timelineItems = [] } = this.props
+    const { user, votes, filterCriteria, timelineItems = [], location } = this.props
+    const params = new URLSearchParams(location.search)
+    const search = params.get('search')
     const { event } = this.props.match.params
     const historyPoint = this.getTimelineEvent(event, timelineItems)
     const userEventVotes = votes.length ? votes.filter(vote => vote.voter === user.username) : []
@@ -150,14 +170,15 @@ class TimelineContainer extends React.Component {
     return (
       <div className="timeline-container">
         <div className="timeline-events">
-          {!event && <TimelineEventWelcome />}
-          {event && (
+          {!event && !search && <TimelineEventWelcome />}
+          {event && !search && (
             <TimelineEventDetails
               timelineEvent={historyPoint}
               voteForEvent={this.voteForEvent}
               userEventVotes={userEventVotes}
             />
           )}
+          {search && <TimelineSearchResult searchTerms={search} events={timelineItems} />}
         </div>
         <div className="timeline">
           <div className="timeline-info-bar">
@@ -166,6 +187,9 @@ class TimelineContainer extends React.Component {
               onStartDateChange={this.onStartDateChange}
               onEndDateChange={this.onEndDateChange}
               onStackOrientationChange={this.onStackOrientationChange}
+              onSearchCriteriaChange={this.onSearchCriteriaChange}
+              submitSearch={this.submitSearch}
+              search={this.state.searchTerms}
             />
           </div>
           <Timeline
@@ -181,7 +205,7 @@ class TimelineContainer extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const { timelineItems, filterCriteria } = state.timelineState
+  const { timelineItems, filterCriteria, search } = state.timelineState
   const { user, votes } = state.userDataState
   if (!filterCriteria.startDate && filterCriteria.endDate && timelineItems.length) {
     const startDates = timelineItems.map(i => new Date(i.start))
@@ -194,7 +218,8 @@ const mapStateToProps = state => {
     timelineItems,
     filterCriteria,
     user,
-    votes
+    votes,
+    search
   }
 }
 

@@ -28,14 +28,19 @@ timelineRouter.route('*').get(
     }
 
     try {
-      let { startDate, endDate } = req.query
-      console.log(`from ${startDate} to ${endDate}`)
-      startDate = startDate ? new Date(startDate) : null
-      endDate = endDate ? new Date(endDate) : null
-      const results = await TimelineItemsDAO.getTimelineItemsByRange(startDate, endDate)
-      console.log(chalk.yellow(`Total timeline items: ${results.timelineItems.length}`))
-
-      res.json({ timelineItems: results.timelineItems })
+      let { startDate, endDate, search } = req.query
+      let results
+      if (search) {
+        console.log(`search: ${search}`)
+        results = await TimelineItemsDAO.getTimelineItemsBySearch(search)
+      } else {
+        console.log(`from ${startDate} to ${endDate}`)
+        startDate = startDate ? new Date(startDate) : null
+        endDate = endDate ? new Date(endDate) : null
+        results = await TimelineItemsDAO.getTimelineItemsByRange(startDate, endDate)
+      }
+        console.log(chalk.yellow(`Total timeline items: ${results.timelineItems.length}`))  
+        res.json({ timelineItems: results.timelineItems })
     } catch (err) {
       next(err)
     }

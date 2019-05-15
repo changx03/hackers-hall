@@ -19,7 +19,9 @@ MongoClient.connect(config.dbUriAdmin, {
   .then(async client => {
     const db = client.db(config.database)
     const timelineItems = await db.collection(collections.TimelineItems)
-    const res = await timelineItems.createIndex({ start: 1, end: 1 })
+    let res = await timelineItems.createIndex({ start: 1, end: 1 })
+    console.log(chalk.green(res))
+    res = await timelineItems.createIndex({ short: 'text', details: 'text' })
     console.log(chalk.green(res))
 
     client.close()

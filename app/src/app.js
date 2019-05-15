@@ -22,7 +22,7 @@ const App = () => (
         <Route path="/about" component={About} />
         <Route path="/results" component={VotingResultsContainer} />
         <Route path="/timeline" component={TimelineContainer} />
-        <Route path="/timeline:event" component={TimelineContainer} />
+        <Route path="/timeline/:event" component={TimelineContainer} />
         <Route path="*" component={NotFoundPage} />
       </Switch>
     </MainContainer>

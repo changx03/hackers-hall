@@ -68,12 +68,13 @@ a.timeline-event_link:hover {
 .timeline-info-bar {
   @include background-opacity($color-dark-grey, 0.45);
   @include flex-container-direction(row, wrap);
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .timeline-info-bar_filter-criteria {
   padding: 5px;
   @include flex-container-direction(row, wrap);
+  flex: 1 1 100%;
 }
 
 .filter-criteria_date input {
@@ -86,11 +87,19 @@ a.timeline-event_link:hover {
 
 .filter-criteria {
   margin-right: 30px;
+  @include flex-container-direction(row, nowrap);
+  @include flex-item-dynamic(1, 0);
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .filter-criteria label {
-  margin-right: 10px;
   color: $color-light-grey--lighten-20;
+  margin: 0
+}
+
+.filter-criteria input[type="checkbox"], .filter-criteria input[type="text"] {
+  margin: 0 10px;
 }
 
 .timeline-event_link-info {
@@ -113,4 +122,44 @@ a.timeline-event_link:hover {
 
 .active-item a {
   color: white
+}
+
+.search-criteria {
+  @include flex-container-direction(row, nowrap);
+  @include flex-item-dynamic(1, 0);
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.search-criteria button {
+  width: 100px;
+  margin :0;
+}
+
+.search-criteria input[type="text"] {
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  border-bottom: 1px solid #7F7C7D;
+  @include background-opacity($color-light-grey--lighten-50, 0.75);
+  border-radius: 4px;
+  box-shadow: none;
+  margin-right: 10px;
+  padding: 10px;
+}
+
+.search-results {
+  @include flex-container-direction(column);
+  padding: 30px;
+  border-radius: 2px;
+}
+
+.search-results_details {
+  @include background-opacity($color-medium-grey, 0.40);
+  margin: 20px 0;
+  padding: 10px;
+}
+
+.search-results_details h2 {
+  margin-top: 10px;
 }

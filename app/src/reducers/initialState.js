@@ -8,7 +8,8 @@ export const timelineState = {
     startDate: moment(new Date('2000-01-01')).toDate(),
     endDate: moment(new Date('2000-01-01')).add(10, 'y').toDate(),
     stackOrientation: false
-  }
+  },
+  search: "",
 }
 
 export const registrationState = {
