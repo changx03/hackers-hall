@@ -178,3 +178,92 @@ Checking query parameter with `express-validator` before it passes into MongoDB
 - Injection demonstration with Burp Suite
 - MongoDB javascript injection attacks
 - Handling untrusted data
+
+### Handling untrusted data
+
+#### Zed Attack Proxy
+
+OWASP zaproxy
+
+Setup ZAP to send exploit requests
+
+- To listen localhost, change port from Zap->Options->Local Proxies
+- Send an API request (register a new user)
+- Right click payload, choose **fuzz**
+- Highlight the content, click **Add**
+- *Add payload*, type: *File Fuzzers*, `jbrofuzz` -> Exploits, SQL Injection
+- *Start Fuzzer*
+
+#### Identifying untrusted data
+
+Which one should we trust?
+
+- [ ] Form input values
+- [ ] *User-Agent* HTTP request header
+- [ ] `<input type="hidden" value="X3gAAOZ...">` server-side injected hidden data <- Can't trusted!
+- [ ] Data from application database <- Can't fully trusted!
+
+1. Any data that is explicitly being supplied from an external source cannot be trusted (e.g. HTTP header can be anything!)
+1. If the data has crossed a trust boundary, it cannot be trusted.
+1. Be cognitive of who has access to the data
+1. Internal resource/threats (Web app, database, web service, admin/DBA)
+
+#### API pipeline
+
+Request -> Middleware -> Route Handler -> Database
+
+Multilayer Approach - Data should validate in each checkpoint
+
+Keep untrusted data as far away from critical systems as possible.
+
+#### Blacklist Approach
+
+Blacklist
+
+```
+<script>
+$%&!;'"`
+1,2,3
+&nbsp;
+```
+
+`&nbsp;` **non-breakable space**
+
+Whitelist
+
+```
+A-Z
+a-z
+0-9
+```
+
+#### Escaping Untrusted Data
+
+***Escaping** simply lets the interpreter know that the data is not intended to be executed, and therefore prevents attacks from working.
+
+\<script\> -> interpreter -> Data "\&lt;script\&gt;"
+
+Example: escaping HTML
+
+```
+THe <body> element...
+```
+
+Escaping rules are specific to an interpreter
+
+HTML - interpreter rules
+CSS - interpreter rules
+JavaScript - interpreter rules
+
+Applying the wrong rules on the wrong context opens up the risk of **cross-site scripting**
+
+#### Sanitizing
+
+Sanitize the data by removing known values to be potentially malicious in order to make the data safe.
+
+Issues with sanitizing
+
+- Blacklist approach
+- Maintenance requirements
+- Context bound
+- Potentially inadequate
