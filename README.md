@@ -267,3 +267,12 @@ Issues with sanitizing
 - Maintenance requirements
 - Context bound
 - Potentially inadequate
+
+#### Access controls
+
+- Principle of Least Privilege
+- Role based access control
+
+Absolutely minimal: enable security.authorization in mongod
+
+Role based users should only able to access certain collection, not the entire database
