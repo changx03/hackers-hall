@@ -276,3 +276,14 @@ Issues with sanitizing
 Absolutely minimal: enable security.authorization in mongod
 
 Role based users should only able to access certain collection, not the entire database
+
+#### Server-side function level control failure
+
+- Client-side validation is untrusted.
+
+#### Access Control Misconfiguration
+
+##### Scenario 1: Only checking using right in `get` request
+
+- User right is only check within `.get()`.
+- Using `.all((req, res, next) => { /* Check user right */ })` to cover all HTTP requests
