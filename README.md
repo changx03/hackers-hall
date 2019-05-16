@@ -407,3 +407,14 @@ https://www.npmjs.com/package/xss
 ### `validate`
 
 https://www.npmjs.com/package/validate
+
+## Securing Your Connection
+
+### TLS
+
+- Blocking man in the middle attack
+- HTTPS: HTTP protocol over TLS (Transport Layer Security) tunnel
+- SSL and TLS represent the same thing. TLS is an improved version of SSL.
+- HTTP + TLS = HTTPS
+
+

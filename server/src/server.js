@@ -11,6 +11,13 @@ import router from './router'
 import reportViolation from './middleware/reportViolation'
 
 const app = express()
+export const insecureApp = express()
+
+// setup a redirect from http to https
+insecureApp.all('*', (req, res, next) => {
+  res.redirect(307, `https://localhost/${req.url}`)
+  next()
+})
 
 process.env.NODE_ENV !== 'production' && app.use(morgan('dev'))
 app.use(helmet())
