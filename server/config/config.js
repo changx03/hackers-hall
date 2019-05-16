@@ -10,5 +10,6 @@ export default {
   dbUriAdmin,
   isProd,
   mode: NODE_ENV,
-  port
+  port,
+  hostName: process.env.HOST_NAME
 }

@@ -38,6 +38,10 @@
 - Run `node ./server/migration/timelineItemsDateUpdate.js` to convert date string to Date
 - Run `yarn start` to start the server
 
+### Mapping host to local DNS
+
+In `C:\Windows\System32\drivers\etc`, add `127.0.0.1 hackershall.com`
+
 ## Migration
 
 ### Usage
@@ -417,4 +421,56 @@ https://www.npmjs.com/package/validate
 - SSL and TLS represent the same thing. TLS is an improved version of SSL.
 - HTTP + TLS = HTTPS
 
+#### Implementation
 
+Using `https` package to create listener to listen port 443.
+Pass private key and certificate file as options.
+
+```javascript
+import https from 'https'
+
+const options = {
+  key: fs.readFileSync(path.resolve(__dirname, '../../data/hackershall.key')),
+  cert: fs.readFileSync(path.resolve(__dirname, '../../data/hackershall.crt'))
+}
+https.createServer(options, app).listen(443)
+```
+
+Redirect all traffic from http to https
+
+```javascript
+export const insecureApp = express()
+
+insecureApp.use(helmet()) // <- We want to apply basic security header too
+insecureApp.all('*', (req, res, next) => {
+  res.redirect(307, `https://localhost/${req.url}`)
+  next()
+})
+```
+
+### Strict-Transport-Security
+
+Added to header
+
+```
+Strict-Transport-Security: max-age=<expire-time>; includeSubDomains; preload
+```
+
+- `includeSubDomains` - this rule applies to all of the site's subdomains as well.
+- `preload` - Google maintains an HSTS preload service. (Not part of the specification)
+
+Testing with `chrome://net-internals/#hsts`
+
+### Content-Security-Policy
+
+```javascript
+// Content-Security-Policy: default-src 'https';
+
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'https'"],
+    }
+  })
+)
+```

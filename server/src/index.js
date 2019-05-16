@@ -33,8 +33,9 @@ MongoClient.connect(config.dbUri, {
     // app.listen(config.port, () => {
     //   console.log('listening on ' + chalk.green(`http://localhost:${config.port}`))
     // })
-    insecureApp.listen(config.port, () => {
-        console.log('listening on ' + chalk.green(`http://localhost:${config.port}`))
+    insecureApp.listen(config.port, config.hostName, () => {
+        console.log('listening on ' + chalk.green(`http://${config.hostName}`))
+        console.log('listening on ' + chalk.green(`https://${config.hostName}`))
       })
     https.createServer(options, app).listen(443)
   })
