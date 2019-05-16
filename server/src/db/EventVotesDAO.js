@@ -116,10 +116,9 @@ export default class EventVotesDAO {
   static async getUsersVotes(user) {
     let votes
     try {
-      votes = await eventVotes.findMany(
-        { voter: user._id },
-        { projection: { eventID: 1, voteType: 1 } }
-      )
+      votes = await eventVotes
+        .find({ voter: user._id }, { projection: { eventID: 1, voteType: 1 } })
+        .toArray()
       return votes.map(v => ({ ...v, voter: user.username }))
     } catch (e) {
       console.error(`Unable to issue findMany ${collections.EventVotes}, ${e.message}`)

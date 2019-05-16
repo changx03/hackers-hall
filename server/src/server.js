@@ -1,18 +1,39 @@
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import express from 'express'
+import helmet from 'helmet'
 import morgan from 'morgan'
 import path from 'path'
+import { mw } from 'request-ip'
 import { errorHandler } from './middleware/errorHandler'
 import sessionConfig from './middleware/session'
 import router from './router'
-import { mw } from 'request-ip'
+import reportViolation from './middleware/reportViolation'
 
 const app = express()
 
 process.env.NODE_ENV !== 'production' && app.use(morgan('dev'))
-app.use(cors())
-app.use(bodyParser.json())
+app.use(helmet())
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"],
+    scriptSrc: ["'self'", "'unsafe-inline'", "/shared", "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js", 'https://fonts.googleapis.com'],
+    styleSrc: ["'self'", "'unsafe-inline'", 'https://use.fontawesome.com', 'https://fonts.googleapis.com'],
+    imgSrc: ["'self'"],
+    fontSrc: ["'self'", 'https://use.fontawesome.com', 'https://fonts.googleapis.com', 'https://fonts.gstatic.com'],
+    // connectSrc: []
+    reportUri: "/report-violation"
+  }
+}))
+app.use(
+  cors({
+    origin: 'http://localhost:3030',
+    optionsSuccessStatus: 200
+  })
+)
+app.use(bodyParser.json({
+  type: ['json', 'application/csp-report']
+}))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(mw()) // middleware for get client IP from `req.clientIp`
 
@@ -23,6 +44,7 @@ app.use(express.static(path.resolve(__dirname, '../../dist')))
 sessionConfig(app)
 
 // routes
+app.use(reportViolation)
 app.use(router)
 
 app.use(errorHandler())

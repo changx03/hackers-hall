@@ -312,8 +312,76 @@ Providing **read-only** right to the _role_
 
 #### Demo: a malicious link from email can send your session-cookie to 3rd party
 
-Scenario: the search result display on the page
+#### Scenario: the search result display on the page
 
 ```
 .../timeline?search=<script>alert(document.cookie)</script>
 ```
+
+#### Reflective Cross-site Scripting (XSS)
+
+Victim's cookies send back to attacker through crafted URL (execute JavaScript)
+
+#### Persistent Cross-site Scripting
+
+##### Scenario: Using script as name
+
+Attacker registered as a standard user, and saved the display name with a crafted malicious script.
+When the administrator visit user list, the script runs and send administrator's cookie to the attacker's URL
+
+##### Common Scenario: Executing script inside comment section
+
+The comment section in a blogger allows user to input html element. Everyone visiting the page that renders this comment will run the script in background.
+
+### DOM based Cross-Site Scripting
+
+- `cookie.httpOnly: true` will block all script to access the cookie
+
+- The execution always comes from the client
+
+### `Content-Security-Policy` header
+
+```
+<header>: <directive> <value>;
+Content-Security-Policy: script-src 'self';
+```
+
+[Content Security Policy explained by helmet documentation](https://helmetjs.github.io/docs/csp/)
+
+Inline code and `eval()` are considered harmful.
+[Google developers Web Fundamentals - Content Security Policy](https://developers.google.com/web/fundamentals/security/csp/)
+
+#### Example
+
+- If I can run JavaScript on your page, I can do a lot of bad things, from stealing authentication cookies to logging every user action.
+- **Tracking pixel**: If I could put a tiny, transparent 1x1 image on your site, I could get a pretty good idea of how much traffic your site gets.
+
+### `X-XSS-PROTECTION` filter header
+
+```
+X-XSS-PROTECTION: 1;mode=block
+```
+
+### `helmet` node package
+
+[Helmet documentation](https://helmetjs.github.io/docs/)
+
+#### Included by default
+
+- dnsPrefetchControl
+- frameguard
+- hidePoweredBy
+- hsts
+- ieNoOpen
+- noSniff
+- xssFilter
+
+#### Not include but should switch on
+
+- contentSecurityPolicy
+
+#### `noSniff` - Don't Sniff Mimetype
+
+##### Scenario: Execute HTML file as image
+
+The attacker could upload an image with the .jpg file extension but its contents are actually HTML. Visiting that image could cause the browser to “run” the HTML page, which could contain malicious JavaScript!

@@ -16,7 +16,7 @@ function renderFullPage(preloadedState) {
   <link rel="stylesheet" type="text/css" href="./shared/vis.min.css">
   <link rel="stylesheet" type="text/css" href="./shared/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="./shared/react-datepicker.min.css">
-  <link href="main.css" rel="stylesheet"></head>
+  <link rel="stylesheet" type="text/css" href="main.css"></head>
 <body>
   <div id="app"></div>
   <script>
@@ -24,7 +24,7 @@ function renderFullPage(preloadedState) {
     // http://redux.js.org/recipes/ServerRendering.html#security-considerations
     window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\u003c')}
   </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script type="text/javascript" src="./shared/jquery.min.js"></script>
   <script type="text/javascript" src="./shared/toastr.min.js"></script>
   <script type="text/javascript" src="./shared/bootstrap.min.js"></script>
@@ -49,5 +49,6 @@ export async function reactRender(req, res) {
 
   const store = configureStore({ userDataState: { user, votes } })
   const finalState = store.getState()
+  res.setHeader('Content-Type', 'text/html; charset=utf-8')
   res.send(renderFullPage(finalState))
 }
