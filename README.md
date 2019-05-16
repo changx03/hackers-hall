@@ -385,3 +385,25 @@ X-XSS-PROTECTION: 1;mode=block
 ##### Scenario: Execute HTML file as image
 
 The attacker could upload an image with the .jpg file extension but its contents are actually HTML. Visiting that image could cause the browser to “run” the HTML page, which could contain malicious JavaScript!
+
+### `xss-filters` Escaping untrusted data
+
+```javascript
+import { inHTMLData } from 'xss-filters'
+console.log(inHTMLDate('<script src="dist/xss-filters.min.js"></script>'))
+```
+
+#### Reasons to Perform Escaping **Prior to Using**
+
+- Helps avoid double encoding
+- Avoids data lose through truncation
+- Greater flexibility of data
+- Less prone to errors
+
+### `XSS` Sanitize untrusted HTML (to prevent XSS)
+
+https://www.npmjs.com/package/xss
+
+### `validate`
+
+https://www.npmjs.com/package/validate

@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { inHTMLData } from 'xss-filters'
 
 const TimelineSearchResult = ({ searchTerms, events }) => (
   <div>
@@ -7,7 +8,7 @@ const TimelineSearchResult = ({ searchTerms, events }) => (
       <div className="timeline-event_details-title">
         <h2 id="search-title">
           <span>Search Results for:</span>{' '}
-          <span dangerouslySetInnerHTML={{ __html: `${searchTerms}` }} />{' '}
+          {inHTMLData(searchTerms)}
         </h2>
       </div>
     </div>

@@ -17,11 +17,11 @@ app.use(helmet())
 app.use(helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", "'unsafe-inline'", "/shared", "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js", 'https://fonts.googleapis.com'],
+    scriptSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js", 'https://fonts.googleapis.com'],
     styleSrc: ["'self'", "'unsafe-inline'", 'https://use.fontawesome.com', 'https://fonts.googleapis.com'],
     imgSrc: ["'self'"],
     fontSrc: ["'self'", 'https://use.fontawesome.com', 'https://fonts.googleapis.com', 'https://fonts.gstatic.com'],
-    // connectSrc: []
+    connectSrc: ["'self'"], // web socket
     reportUri: "/report-violation"
   }
 }))
